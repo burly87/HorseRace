@@ -31,12 +31,11 @@ public class GameLogic : MonoBehaviour
     public GameObject[] horsePos;
 
     [Header("Deck")]
-    //[HideInInspector]
+    [HideInInspector]
     public List<string> deck;
-    public Transform deckPile;
-    public Transform discardPile;
-    // public GameObject[] deckPrefabs;                // for anreachable prefabs
-    private string currentCardPos;
+    public Transform deckPile;                          // deck 
+    public Transform discardPile;                       // for the card drawn
+    // public GameObject[] deckPrefabs;                 // for anreachable prefabs
 
     public void Start()
     {
@@ -47,7 +46,7 @@ public class GameLogic : MonoBehaviour
         // instantiate deckpile
         DealCards();
         // instantiate jacks
-        SetHorses();
+        StartCoroutine( SetHorses());
         
         // place rest on pile
     }
@@ -88,31 +87,32 @@ public class GameLogic : MonoBehaviour
         float zOffset = 0.03f;
         foreach (string card in deck)
         {
-            GameObject newCard = Instantiate(cardPrefab, new Vector3(deckPile.position.x, deckPile.position.y, deckPile.position.z + zOffset), Quaternion.identity);
+            GameObject newCard = Instantiate(cardPrefab, new Vector3(deckPile.position.x, deckPile.position.y, deckPile.position.z + zOffset), Quaternion.identity, deckPile);
             zOffset += 0.03f;
             newCard.name = card;
         }
 
         // place last 9 cards of deck on top 9 pos and remove from deck
-        GetTrackCards();
+        StartCoroutine( GetTrackCards());
     }
 
     /// <summary>
     /// Instantiate Horses on their correct pos.
     /// </summary>
-    void SetHorses()
+    IEnumerator SetHorses()
     {
         int i = 0;
 
         if (horses.Equals(null))
         {
             // exception handling!
-            return;
+            
         }
 
         foreach (GameObject horse in horses)
         {
-            GameObject newHorse = Instantiate(horses[i], new Vector3(horsePos[i].transform.position.x, horsePos[i].transform.position.y, horsePos[i].transform.position.z), Quaternion.identity);
+            yield return new WaitForSeconds(0.15f);
+            GameObject newHorse = Instantiate(horses[i], new Vector3(horsePos[i].transform.position.x, horsePos[i].transform.position.y, horsePos[i].transform.position.z), Quaternion.identity, horsePos[i].transform);
             i++;
         }
     }
@@ -120,41 +120,29 @@ public class GameLogic : MonoBehaviour
     /// <summary>
     /// Get the track cards to play with
     /// </summary>
-    void GetTrackCards()
+    IEnumerator GetTrackCards()
     {
         cardsOfRacetrack = new List<string>();
 
-        for (int i = 1; i < 10; i++)
+        for (int i = 0; i < 9; i++)
         {
-            string tmp = deck[deck.Count-i];
-            cardsOfRacetrack.Add(tmp);
+            cardsOfRacetrack.Add(deck.Last<string>());
+            deck.RemoveAt(deck.Count - 1);
         }
-
-        //remove last 9 cards starting at index 39
-        deck.RemoveRange(38, 9);
-
 
         int count = 0;
         foreach (string trackCard in cardsOfRacetrack)
         {
-            GameObject newCard = Instantiate(cardPrefab, new Vector3(cardsOfRacetrackPos[count].transform.position.x, cardsOfRacetrackPos[count].transform.position.y, cardsOfRacetrackPos[count].transform.position.z), Quaternion.identity);
+            yield return new WaitForSeconds(0.1f);
+            GameObject newCard = Instantiate(cardPrefab, new Vector3(cardsOfRacetrackPos[count].transform.position.x, cardsOfRacetrackPos[count].transform.position.y, cardsOfRacetrackPos[count].transform.position.z), Quaternion.identity, cardsOfRacetrackPos[count].transform);
             newCard.name = trackCard;
             count++;
         }
 
-
-
-        //print("last 9 elements of list are: ");
-        //for (int i = 39; i < 48; i++)
+        //foreach (string c in cardsOfRacetrack)
         //{
-        //    string test = deck[i];
-        //    print(test);
+        //    print(c);
         //}
-
-        foreach (string c in cardsOfRacetrack)
-        {
-            print(c);
-        }
     }
 }
 
