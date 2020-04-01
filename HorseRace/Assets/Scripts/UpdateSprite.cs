@@ -17,7 +17,6 @@ public class UpdateSprite : MonoBehaviour
         List<string> deck = GameLogic.GenerateDeck();
         gameLogic = FindObjectOfType<GameLogic>();
 
-
         int i = 0;
         foreach (string card in deck)
         {
