@@ -47,8 +47,19 @@ public class GameLogic : MonoBehaviour
         DealCards();
         // instantiate jacks
         StartCoroutine( DealHorses());
-        
-        // place rest on pile
+    }
+
+    //---- DEBUG ONLY ---
+    void Update()
+    {
+        if(Input.GetKeyDown(KeyCode.Y))
+        {
+            TurnFaceofTrackCard();
+        }
+        if(Input.GetKeyDown(KeyCode.U))
+        {
+            MoveHorse(0);
+        }
     }
 
     public static List<string> GenerateDeck()
@@ -164,7 +175,9 @@ public class GameLogic : MonoBehaviour
 
     float zOffset = 0f;
     public int cardsDrawn = 0;
+    int faceUpCount = 0;
 
+    ///<summary>Make the deck clickable, draw card, put it on discardPile and remove from deck</summary>
     public void PlayDeckCard()
     {
         // move from deck to discardPile
@@ -181,12 +194,31 @@ public class GameLogic : MonoBehaviour
         //remove from deck
         deck.RemoveAt(deck.Count - 1);
 
+
         // if deck is empty copy all discardPile cards to deck and clear discardPile
         if (cardsDrawn >= 39)
         {
             cardsDrawn = 0;
             RestackDeck();
         }
+    }
+
+    void TurnFaceofTrackCard()
+    {
+        // UpdateSprite to correct card sprite
+        if(faceUpCount <= 8)
+        {
+            cardsOfRacetrackPos[faceUpCount].GetComponentInChildren<UpdateSprite>().faceUp = true;
+            faceUpCount++;
+        }
+        // get back CardSuit to know which horse has to move back
+
+    }
+
+    ///<summar>Move horse with number int</summary>
+    void MoveHorse(int horse)
+    {
+        horsePos[horse].transform.position += new Vector3(3.5f, 0.0f, 0.0f);
     }
 }
 
