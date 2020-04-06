@@ -5,15 +5,12 @@ using UnityEngine;
 
 public class InputController : MonoBehaviour
 {
-    [SerializeField]
-    int count = 0;
-
-    private GameLogic gameLogic;
+    private GameControll gameControll;
 
     // Start is called before the first frame update
     void Start()
     {
-        gameLogic = FindObjectOfType<GameLogic>();
+        gameControll = FindObjectOfType<GameControll>();
     }
 
     // Update is called once per frame
@@ -21,6 +18,20 @@ public class InputController : MonoBehaviour
     {
 
         GetMouseClick();
+
+        //Debug
+        if (Input.GetKeyDown(KeyCode.Y))
+        {
+            gameControll.TurnFaceofTrackCard();
+        }
+        if (Input.GetKeyDown(KeyCode.U))
+        {
+            gameControll.MoveHorse(0);
+        }
+        if (Input.GetKeyDown(KeyCode.K))
+        {
+            gameControll.RestartGame();
+        }
     }
 
     void GetMouseClick()
@@ -46,17 +57,12 @@ public class InputController : MonoBehaviour
 
     private void DeckClicked()
     {
-        gameLogic.PlayDeckCard();
+        gameControll.PlayDeckCard();
         // get back suite of card
             // move horse 
     }
 
     private void HorseClicked(GameObject gameObject)
-    {
-        
-    }
-
-    void HorseClick(HorseControll horse)
     {
         
     }

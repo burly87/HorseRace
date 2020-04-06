@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public enum CardColor { HEART, SPADE, CLOVER, DIAMOND };
 public enum Values { Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King }; // delete Jack later
@@ -15,16 +16,16 @@ public class GameLogic : MonoBehaviour
 {
     // creating the cards and deck
     public static string[] suits = new string[] { "C", "D", "H", "S" };
-    public static string[] values = new string[] { "2", "3", "4", "5", "6", "7", "8", "9", "10", "A", "K","Q"};
-    
+    public static string[] values = new string[] { "2", "3", "4", "5", "6", "7", "8", "9", "10", "A", "K", "Q" };
+
     [Header("Sprites & Prefab of Deckcards")]
     public Sprite[] cardFaces;
     public GameObject cardPrefab;
 
     [Header("Track cards")]
     [SerializeField]
-    private GameObject[] cardsOfRacetrackPos;                       // manage position of track cards
-    private List<string> cardsOfRacetrack = new List<string>();     // List of cards on track to play with
+    public GameObject[] cardsOfRacetrackPos;                        // manage position of track cards
+    public List<string> cardsOfRacetrack = new List<string>();      // List of cards on track to play with
 
     [Header("Horses")]
     public GameObject[] horses;
@@ -32,12 +33,12 @@ public class GameLogic : MonoBehaviour
 
     [Header("Deck")]
     public List<string> deck;
-    public List<string> discardPile = new List<string>();   // pile to save every drawn card to swap later with deckpile so we can start from begining. dont forget to shuffle again
-    public Transform deckPilePos;                           // deck 
-    public Transform discardPilePos;                        // for the card drawn
-    // public GameObject[] deckPrefabs;                     // for anreachable prefabs
+    public List<string> discardPile = new List<string>();           // pile to save every drawn card to swap later with deckpile so we can start from begining. dont forget to shuffle again
+    public Transform deckPilePos;                                   // deck 
+    public Transform discardPilePos;                                // for the card drawn
+    // public GameObject[] deckPrefabs;                             // for anreachable prefabs
 
-    public void Start()
+    public void StartGame()
     {
         //Generate deck with all cards except Jacks
         deck = GenerateDeck();
@@ -46,22 +47,11 @@ public class GameLogic : MonoBehaviour
         // instantiate deckpile
         DealCards();
         // instantiate jacks
-        StartCoroutine( DealHorses());
+        StartCoroutine(DealHorses());
     }
 
-    //---- DEBUG ONLY ---
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.Y))
-        {
-            TurnFaceofTrackCard();
-        }
-        if(Input.GetKeyDown(KeyCode.U))
-        {
-            MoveHorse(0);
-        }
-    }
-
+    /// <summary>generate a complete new Deck based on suits and values in string array</summary>
+    /// <returns></returns>
     public static List<string> GenerateDeck()
     {
         List<string> newDeck = new List<string>();
@@ -91,7 +81,7 @@ public class GameLogic : MonoBehaviour
     }
 
     /// <summary>handout the cards </summary>
-    void DealCards()
+    public void DealCards()
     {
         float zOffset = 0.03f;
         foreach (string card in deck)
@@ -106,7 +96,7 @@ public class GameLogic : MonoBehaviour
     }
 
     /// <summary> Instantiate the Cards on the Track & remove them from deck </summary>
-    IEnumerator DeadlTrackCards()
+    public IEnumerator DeadlTrackCards()
     {
         discardPile.Clear();
         //add last 9 cards to track cards and remove them from deck
@@ -124,15 +114,10 @@ public class GameLogic : MonoBehaviour
             newCard.name = trackCard;
             count++;
         }
-
-        //foreach (string c in cardsOfRacetrack)
-        //{
-        //    print(c);
-        //}
     }
 
     /// <summary> Instantiate Horses on their correct pos.</summary>
-    IEnumerator DealHorses()
+    public IEnumerator DealHorses()
     {
         int i = 0;
 
@@ -151,7 +136,7 @@ public class GameLogic : MonoBehaviour
     }
 
     /// <summary> Restack deck with the cards in the discardPile </summary>
-    void RestackDeck()
+    public void RestackDeck()
     {
         foreach (Transform child in discardPilePos)
         {
@@ -171,55 +156,58 @@ public class GameLogic : MonoBehaviour
         Shuffle(deck);
     }
 
-    // ---------------- Playing -----------------
-
-    float zOffset = 0f;
-    public int cardsDrawn = 0;
-    int faceUpCount = 0;
-
-    ///<summary>Make the deck clickable, draw card, put it on discardPile and remove from deck</summary>
-    public void PlayDeckCard()
+    public void RestartGame()
     {
-        // move from deck to discardPile
-        discardPile.Add(deck.Last<string>());
+        //Make sure that nothing is clickable or started till RestartGame is finished complettly
 
-        //instantiate last drawn card
-        string card = deck.Last<string>();
-        GameObject drawnCard = Instantiate(cardPrefab, new Vector3(discardPilePos.transform.position.x, discardPilePos.transform.position.y, discardPilePos.transform.position.z - zOffset), Quaternion.identity, discardPilePos.transform);
-        drawnCard.name = card;
-        drawnCard.GetComponent<UpdateSprite>().faceUp = true;
-        zOffset += 0.03f;
-
-        cardsDrawn++;    
-        //remove from deck
-        deck.RemoveAt(deck.Count - 1);
-
-
-        // if deck is empty copy all discardPile cards to deck and clear discardPile
-        if (cardsDrawn >= 39)
+        //clear all lists
+        deck.Clear();
+        discardPile.Clear();
+        cardsOfRacetrack.Clear();
+        //destroy all instantiated cards
+        foreach (Transform child in discardPilePos)
         {
-            cardsDrawn = 0;
-            RestackDeck();
+            if (child.CompareTag("Card"))
+            {
+                Destroy(child.gameObject);
+            }
         }
-    }
-
-    void TurnFaceofTrackCard()
-    {
-        // UpdateSprite to correct card sprite
-        if(faceUpCount <= 8)
+        foreach (Transform child in deckPilePos)
         {
-            cardsOfRacetrackPos[faceUpCount].GetComponentInChildren<UpdateSprite>().faceUp = true;
-            faceUpCount++;
+            if (child.CompareTag("Card"))
+            {
+                Destroy(child.gameObject);
+            }
         }
-        // get back CardSuit to know which horse has to move back
-
+        foreach (GameObject child in cardsOfRacetrackPos)
+        {
+            foreach (Transform trans in child.transform)
+            {
+                if (trans.CompareTag("Card"))
+                {
+                    Destroy(trans.gameObject);
+                }
+            }
+        }
+        foreach (GameObject child in horsePos)
+        {
+            foreach (Transform trans in child.transform)
+            {
+                if (trans.CompareTag("Horse"))
+                {
+                    Destroy(trans.gameObject);
+                }
+            }
+        }
+        //reset Horse Position
+        horsePos[0].transform.position = new Vector3(-19.0f, 5.5f, 0.0f);
+        horsePos[1].transform.position = new Vector3(-19.0f, 1.0f, 0.0f);
+        horsePos[2].transform.position = new Vector3(-19.0f, -3.5f, 0.0f);
+        horsePos[3].transform.position = new Vector3(-19.0f, -8.0f, 0.0f);
+        //start game
+        StartGame();
     }
 
-    ///<summar>Move horse with number int</summary>
-    void MoveHorse(int horse)
-    {
-        horsePos[horse].transform.position += new Vector3(3.5f, 0.0f, 0.0f);
-    }
 }
 
 
