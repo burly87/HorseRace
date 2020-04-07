@@ -5,12 +5,12 @@ using UnityEngine;
 
 public class InputController : MonoBehaviour
 {
-    private GameControll gameControll;
+    private GameController gameController;
 
     // Start is called before the first frame update
     void Start()
     {
-        gameControll = FindObjectOfType<GameControll>();
+        gameController = FindObjectOfType<GameController>();
     }
 
     // Update is called once per frame
@@ -20,7 +20,7 @@ public class InputController : MonoBehaviour
         //Debug
         if (Input.GetKeyDown(KeyCode.K))
         {
-            gameControll.RestartGame();
+            gameController.RestartGame();
         }
     }
 
@@ -47,7 +47,7 @@ public class InputController : MonoBehaviour
 
     private void DeckClicked()
     {
-        gameControll.PlayDeckCard();
+        gameController.PlayDeckCard();
         // get back suite of card
             // move horse 
     }
