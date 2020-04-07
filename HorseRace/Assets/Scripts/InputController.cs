@@ -16,18 +16,8 @@ public class InputController : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         GetMouseClick();
-
         //Debug
-        if (Input.GetKeyDown(KeyCode.Y))
-        {
-            gameControll.TurnFaceofTrackCard();
-        }
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            gameControll.MoveHorse(0);
-        }
         if (Input.GetKeyDown(KeyCode.K))
         {
             gameControll.RestartGame();
@@ -62,6 +52,7 @@ public class InputController : MonoBehaviour
             // move horse 
     }
 
+    // for later to get sips on horses
     private void HorseClicked(GameObject gameObject)
     {
         

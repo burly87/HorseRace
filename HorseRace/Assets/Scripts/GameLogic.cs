@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-
-public enum CardColor { HEART, SPADE, CLOVER, DIAMOND };
-public enum Values { Ace, Two, Three, Four, Five, Six, Seven, Eight, Nine, Ten, Jack, Queen, King }; // delete Jack later
 
 // 52 cards
 // 4 jack/horses
@@ -156,6 +152,14 @@ public class GameLogic : MonoBehaviour
         Shuffle(deck);
     }
 
+    ///<summary> retrun string of last drawn card in discardPile</summary>
+    public string GetSuitOfCard()
+    {
+        string suitOfCard = discardPile.Last<string>();
+        return suitOfCard;
+    }
+
+    ///<summary>Restart Game by clearing lists, destroy Instantiated Cards and reset Positions</summary>
     public void RestartGame()
     {
         //Make sure that nothing is clickable or started till RestartGame is finished complettly
