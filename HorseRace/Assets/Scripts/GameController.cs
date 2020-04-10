@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 
 public class GameController : MonoBehaviour
 {
@@ -27,6 +28,7 @@ public class GameController : MonoBehaviour
     // --- Classes to controll ---
     private GameLogic gameLogic;
     private InputController inputController;
+    private UiController uiController;
 
     // --- Play card from deck relevants ---
     float zOffset = 0f;                     // offset to set cards on top of each other, could also be done with layers in unity
@@ -41,10 +43,52 @@ public class GameController : MonoBehaviour
         //init all controllers
         gameLogic = FindObjectOfType<GameLogic>();
         inputController = FindObjectOfType<InputController>();
+        uiController = FindObjectOfType<UiController>();
 
         //Start Game
         gameLogic.StartGame();
+
+        //Listener
+        FinishLine.OnEnterFinishLine += FinishLine_OnEnterFinishLine;
     }
+
+    // --- Observe ---
+    private void FinishLine_OnEnterFinishLine(FinishLine obj)
+    {
+        // Stop any clickable/ Thread
+        inputController.ClickAble = false;
+
+        // set winner to winning horsename
+        string winner = obj.HorseName;
+        ChooseWinner(winner[0]);
+
+        // tell UI to show up
+        uiController.ShowWinningText(winner[0]);
+
+    }
+
+    /// <summary>Get Char of wining horse and give it to UI</summary>
+    /// <param name="winner"> char of wining horseCard </param>
+    private void ChooseWinner(char winner)
+    { 
+        switch(winner)
+        {
+            case 'C':
+                Debug.Log("CLUBS WINS!");
+                break;
+            case 'D':
+                Debug.Log("DIAMANDS WINS!");
+                break;
+            case 'H':
+                Debug.Log("HEART WINS!");
+                break;
+            case 'S':
+                Debug.Log("SPADES WINS!");
+                break;
+        }
+    }
+
+
 
     ///<summary>Make the deck clickable, draw card, put it on discardPile and remove from deck</summary>
     public void PlayDeckCard()
@@ -113,6 +157,8 @@ public class GameController : MonoBehaviour
         zOffset = 0.0f;
         cardsDrawn = 0;
         faceUpCount = 0;
+        inputController.ClickAble = true;
+        uiController.RestartUi();
         gameLogic.RestartGame();
     }
 }

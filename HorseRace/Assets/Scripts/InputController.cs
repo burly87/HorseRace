@@ -7,26 +7,22 @@ public class InputController : MonoBehaviour
 {
     private GameController gameController;
 
-    // Start is called before the first frame update
+    private bool _clickAble = true;
+    public bool ClickAble { get => _clickAble; set => _clickAble = value; }
+
     void Start()
     {
         gameController = FindObjectOfType<GameController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         GetMouseClick();
-        //Debug
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            gameController.RestartGame();
-        }
     }
 
     void GetMouseClick()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && _clickAble)
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -10));
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
