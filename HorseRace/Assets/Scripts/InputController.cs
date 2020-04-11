@@ -5,28 +5,24 @@ using UnityEngine;
 
 public class InputController : MonoBehaviour
 {
-    private GameControll gameControll;
+    private GameController gameController;
 
-    // Start is called before the first frame update
+    private bool _clickAble = true;
+    public bool ClickAble { get => _clickAble; set => _clickAble = value; }
+
     void Start()
     {
-        gameControll = FindObjectOfType<GameControll>();
+        gameController = FindObjectOfType<GameController>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         GetMouseClick();
-        //Debug
-        if (Input.GetKeyDown(KeyCode.K))
-        {
-            gameControll.RestartGame();
-        }
     }
 
     void GetMouseClick()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (Input.GetMouseButtonDown(0) && _clickAble)
         {
             Vector3 mousePosition = Camera.main.ScreenToWorldPoint(new Vector3(Input.mousePosition.x, Input.mousePosition.y, -10));
             RaycastHit2D hit = Physics2D.Raycast(Camera.main.ScreenToWorldPoint(Input.mousePosition), Vector2.zero);
@@ -47,7 +43,7 @@ public class InputController : MonoBehaviour
 
     private void DeckClicked()
     {
-        gameControll.PlayDeckCard();
+        gameController.PlayDeckCard();
         // get back suite of card
             // move horse 
     }
