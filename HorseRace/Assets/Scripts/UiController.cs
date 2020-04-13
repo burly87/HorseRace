@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 public class UiController : MonoBehaviour
 {
-    
+
     [SerializeField]
     private GameObject Ui;
 
@@ -14,8 +14,14 @@ public class UiController : MonoBehaviour
     [SerializeField]
     private GameObject restartBtn;
 
+    [SerializeField]
     private Text winTxt;
+    [SerializeField]
+
     private Image winSprite;
+
+    // menu
+    public GameObject menu;
 
     private void Start()
     {

@@ -70,9 +70,9 @@ public class GameController : MonoBehaviour
 
         // set winner to winning horsename
         string winner = obj.HorseName;
-        ChooseWinner(winner[0]);
+        ChooseWinner(winner[0]);                            // No functionality yet
 
-        // tell UI to show up
+        // tell UI to show winner
         uiController.ShowWinningText(winner[0]);
     }
 

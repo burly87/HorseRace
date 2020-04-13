@@ -6,18 +6,30 @@ using UnityEngine;
 public class InputController : MonoBehaviour
 {
     private GameController gameController;
+    private UiController uiController;
 
     private bool _clickAble = true;
     public bool ClickAble { get => _clickAble; set => _clickAble = value; }
 
+    // Menu
+    private bool menuOpen = false;
+
+
+
     void Start()
     {
         gameController = FindObjectOfType<GameController>();
+        uiController = FindObjectOfType<UiController>();
     }
 
     void Update()
     {
         GetMouseClick();
+
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            OpenMenu();
+        }
     }
 
     void GetMouseClick()
@@ -52,6 +64,12 @@ public class InputController : MonoBehaviour
     private void HorseClicked(GameObject gameObject)
     {
         
+    }
+
+    private void OpenMenu()
+    {
+        menuOpen = !menuOpen;
+        uiController.menu.SetActive(menuOpen);
     }
 
 }
