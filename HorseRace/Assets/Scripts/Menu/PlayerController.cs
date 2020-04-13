@@ -1,31 +1,27 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerController : MonoBehaviour
 {
-    private static PlayerController _instance;
+    DataManager dataManager;
 
-    public static PlayerController Instance
+    // choose by player and give to datamanager.players List
+    public GameObject inputField;           // to get the PlayerName
+    public Color colorPicker;
+
+    void Start()
     {
-        get { return _instance; }
+        dataManager = FindObjectOfType<DataManager>();
     }
 
-    private void Awake()
+    public void AddPlayer()
     {
-        if (_instance != null && _instance != this)
-        {
-            Destroy(this.gameObject);
-            return;
-        }
+        string tmpName = inputField.GetComponent<Text>().text;
+        Color tmpColor = colorPicker;
 
-        _instance = this;
-        DontDestroyOnLoad(this.gameObject);
+        dataManager.AddPlayer(tmpName, tmpColor);
     }
 
-
-    //------------
-
-    public string name;
-    public GameObject inputField;
 }
