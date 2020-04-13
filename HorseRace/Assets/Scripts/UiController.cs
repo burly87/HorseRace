@@ -4,8 +4,11 @@ using UnityEngine.UI;
 
 public class UiController : MonoBehaviour
 {
+    
     [SerializeField]
     private GameObject Ui;
+
+    //Wining
     [SerializeField]
     private Sprite[] suitsSprites;
     [SerializeField]

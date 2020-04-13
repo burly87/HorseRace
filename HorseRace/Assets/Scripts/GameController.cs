@@ -50,6 +50,16 @@ public class GameController : MonoBehaviour
 
         //Listener
         FinishLine.OnEnterFinishLine += FinishLine_OnEnterFinishLine;
+        TrackCard.OnTriggerEnterTrackcard += TrackCard_OnTriggerEnterTrackcard;
+    }
+
+    private void TrackCard_OnTriggerEnterTrackcard(TrackCard obj)
+    {
+        if(obj.Counter == 4)
+        {
+            obj.Counter = 0;
+            TurnFaceofTrackCard();
+        }
     }
 
     // --- Observe ---
@@ -64,9 +74,9 @@ public class GameController : MonoBehaviour
 
         // tell UI to show up
         uiController.ShowWinningText(winner[0]);
-
     }
 
+    
     /// <summary>Get Char of wining horse and give it to UI</summary>
     /// <param name="winner"> char of wining horseCard </param>
     private void ChooseWinner(char winner)
@@ -119,7 +129,7 @@ public class GameController : MonoBehaviour
         }
     }
 
-    /// <summary>Flip card to Face</summary>
+    /// <summary>Flip card of TrackCards and let drawn Horse step back 1</summary>
     public void TurnFaceofTrackCard()
     {
         // UpdateSprite to correct card sprite
