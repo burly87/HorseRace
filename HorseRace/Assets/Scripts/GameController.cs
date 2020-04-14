@@ -29,6 +29,7 @@ public class GameController : MonoBehaviour
     private GameLogic gameLogic;
     private InputController inputController;
     private UiController uiController;
+    private DataManager dataManager;
 
     // --- Play card from deck relevants ---
     float zOffset = 0f;                     // offset to set cards on top of each other, could also be done with layers in unity
@@ -44,6 +45,7 @@ public class GameController : MonoBehaviour
         gameLogic = FindObjectOfType<GameLogic>();
         inputController = FindObjectOfType<InputController>();
         uiController = FindObjectOfType<UiController>();
+        dataManager = FindObjectOfType<DataManager>();
 
         //Start Game
         gameLogic.StartGame();

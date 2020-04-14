@@ -7,9 +7,14 @@ public class InputController : MonoBehaviour
 {
     private GameController gameController;
     private UiController uiController;
+    private DataManager dataManager;
 
     private bool _clickAble = true;
     public bool ClickAble { get => _clickAble; set => _clickAble = value; }
+
+    // bet on horses
+    int betCount = 0;           // sips a player bet on one horse., has to be resettet when different horse or player
+    int playerNb;               // helper to choose the right player. Go through datamanager.players.count
 
     // Menu
     private bool menuOpen = false;
@@ -20,6 +25,11 @@ public class InputController : MonoBehaviour
     {
         gameController = FindObjectOfType<GameController>();
         uiController = FindObjectOfType<UiController>();
+        dataManager = FindObjectOfType<DataManager>();
+
+        // bet
+        playerNb = dataManager.players.Count;
+        Debug.Log("players participate:" + playerNb);
     }
 
     void Update()
@@ -47,7 +57,7 @@ public class InputController : MonoBehaviour
                 }
                 else if (hit.collider.CompareTag("Horse"))
                 {
-                    HorseClicked(hit.collider.gameObject);
+                    BetOnHorse(hit.collider.gameObject);
                 }
             }
         }
@@ -60,10 +70,44 @@ public class InputController : MonoBehaviour
             // move horse 
     }
 
+    
     // for later to get sips on horses
-    private void HorseClicked(GameObject gameObject)
+    private void BetOnHorse(GameObject horse)
     {
+        betCount++;
+        if(horse.name[0] == 'C')
+        {
+            Debug.Log("Bet " + betCount + " sip on " + horse.name);
+        }
+        if(horse.name[0] == 'D')
+        {
+            Debug.Log("Bet " + betCount + " sip on " + horse.name);
+        }
+        if(horse.name[0] == 'H')
+        {
+            Debug.Log("Bet " + betCount + " sip on " + horse.name);
+        }
+        if(horse.name[0] == 'S')
+        {
+            Debug.Log("Bet " + betCount + " sip on " + horse.name);
+        }
+
+        NextPlayer(playerNb);
+    }
+
+    void NextPlayer(int playerNumber)
+    {
+        // reset sips bet 
+        betCount = 0;
+        //decrement global playerNb for next player
+        playerNb--;
+
+        // save data in player data 
+        dataManager.UpdatePlayerStats(playerNumber,Suits.DIAMAND, betCount);
+        // dataManager.players[playerNb].sips = betCount;
         
+        // give next player chance to bet
+
     }
 
     private void OpenMenu()
