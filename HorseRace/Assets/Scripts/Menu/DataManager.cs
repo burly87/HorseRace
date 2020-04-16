@@ -52,16 +52,6 @@ public class DataManager : MonoBehaviour
 
         // add player to list
         players.Add(player);
-
-        // foreach (Player p in players)
-        // {
-        //     Debug.Log(p.name);
-        //     Debug.Log(p.suit);
-        //     Debug.Log(p.color);
-        //     Debug.Log(p.sips);
-        //     Debug.Log(p.result);
-        // }
-
     }
 
     public void UpdatePlayerStats(int playerNb, Suits suitsUpdate,int sipsUpdate)

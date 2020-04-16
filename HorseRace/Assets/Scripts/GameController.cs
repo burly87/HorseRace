@@ -22,7 +22,7 @@ public class GameController : MonoBehaviour
         }
 
         _instance = this;
-        DontDestroyOnLoad(this.gameObject);
+       // DontDestroyOnLoad(this.gameObject);
     }
 
     // --- Classes to controll ---
