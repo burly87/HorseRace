@@ -22,6 +22,7 @@ public class UiController : MonoBehaviour
 
     // menu
     public GameObject menu;
+    public GameObject betMenu;
 
     private void Start()
     {
@@ -71,6 +72,11 @@ public class UiController : MonoBehaviour
         winTxt.enabled = false;
         winSprite.enabled = false;
         restartBtn.SetActive(false);
+    }
+
+    public void CloseBetMenu()
+    {
+        betMenu.SetActive(false);
     }
 
 }

@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using UnityEngine.Networking.NetworkSystem;
 
 public class PlayerController : MonoBehaviour
 {
@@ -12,6 +10,7 @@ public class PlayerController : MonoBehaviour
     // choose by player and give to datamanager.players List
     public GameObject inputField;           // to get the PlayerName
     public Button btn_Add;                  // addbutton
+    public Button btn_Start;                // start Button
     private int playerCount = 0;            // max of 8 
 
     //Playerlist
@@ -48,6 +47,10 @@ public class PlayerController : MonoBehaviour
         if (inputField.GetComponent<Text>().text == "")  btn_Add.interactable = false;
         else btn_Add.interactable = true;
         if (playerCount >= 8) btn_Add.interactable = false;
+
+        // make sure at least 1 player is in list to start game
+        if (playerCount < 1) btn_Start.interactable = false;
+        else btn_Start.interactable = true;
     }
 
     public void AddPlayer()
@@ -56,7 +59,7 @@ public class PlayerController : MonoBehaviour
         string tmpName = inputField.GetComponent<Text>().text;
 
         //add to datamanager.players to save data
-      //  dataManager.AddPlayer(tmpName, colors[colorNumber]);
+        dataManager.AddPlayer(tmpName, colors[colorNumber]);
 
         //update Text from Playerlist
         playerList.text += "" + tmpName + "\n";
@@ -73,8 +76,14 @@ public class PlayerController : MonoBehaviour
 
         //update sprite
         maxColor--;
-        if(colors.Count > 0) colorImg.color = colors[0];
-
+        if (colors.Count > 0)
+        {
+            colorImg.color = colors[0];
+        }
+        if (colorNumber == colors.Count)
+        {
+            colorNumber--;
+        }
     }
 
     public void SwitchColor(int dir)

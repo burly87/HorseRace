@@ -3,14 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-public enum Suits {CLUB, DIAMAND, HEART, SPADES}
-
 public struct Player{
     public string name;
-    public Suits suit;
     public Color color;
-    public int sips {get=> sips; set => sips = value;}
-    public int result;
+    public int sipsBet_C, sipsBet_D, sipsBet_H, sipsBet_S;
+    public int sipstoGive;
     }
 
 public class DataManager : MonoBehaviour
@@ -49,33 +46,26 @@ public class DataManager : MonoBehaviour
         // set all values 
         player.name = name;
         player.color = color;
+        player.sipsBet_C = 0;
+        player.sipsBet_D = 0;
+        player.sipsBet_H = 0;
+        player.sipsBet_S = 0;
+        player.sipstoGive = 0;
 
         // add player to list
         players.Add(player);
     }
 
-    public void UpdatePlayerStats(int playerNb, Suits suitsUpdate,int sipsUpdate)
+    public void UpdatePlayerStats(int index, int sipsUp_C, int sipsUp_D, int sipsUp_H, int sipsUp_S)
     {
-        Player p = players[playerNb];
-        p.sips = sipsUpdate;
-        p.suit = suitsUpdate;
+        Player p = players[index];
+        p.sipsBet_C = sipsUp_C;
+        p.sipsBet_D = sipsUp_D;
+        p.sipsBet_H = sipsUp_H;
+        p.sipsBet_S = sipsUp_S;
+
+        players[index] = p;
+       // Debug.Log("Playernindex: " + index + "Suit: "+ players[index].suit + "Sips: " + players[index].sips);
     }
 
-
-    void Update()
-    {
-        if(Input.GetKeyDown(KeyCode.P))
-        {
-            foreach (Player p in players)
-            {
-                Debug.Log("Player : " + p.name  + "\n" + p.suit+ "\n" + p.sips  );
-            }
-            // Debug.Log("Player 0: " + players[0].name  + "\n" + players[0].color+ "\n" + players[0].suit  );
-            // Debug.Log("Player 1: " + players[1].name  + "\n" + players[1].color+ "\n" + players[1].suit  );
-            // Debug.Log("Player 2: " + players[2].name  + "\n" + players[2].color+ "\n" + players[2].suit  );
-
-
-        }
-    }
-    
 }

@@ -2,6 +2,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
 
 public class InputController : MonoBehaviour
 {
@@ -13,13 +15,23 @@ public class InputController : MonoBehaviour
     public bool ClickAble { get => _clickAble; set => _clickAble = value; }
 
     // bet on horses
-    int betCount = 0;           // sips a player bet on one horse., has to be resettet when different horse or player
-    int playerNb;               // helper to choose the right player. Go through datamanager.players.count
+    int betCount_C = 0;             // sips a player bet on one horse., has to be resettet when different horse or player
+    int betCount_D = 0;
+    int betCount_H = 0;
+    int betCount_S = 0;
+    int playerIndex;                   // helper to choose the right player. Go through datamanager.players.count
+
+    int betCounter = 0;
+
+    public Text txt_betC;
+    public Text txt_betD;
+    public Text txt_betH;
+    public Text txt_betS;
+
+    public TextMeshProUGUI txt_betTitle;
 
     // Menu
     private bool menuOpen = false;
-
-
 
     void Start()
     {
@@ -28,8 +40,12 @@ public class InputController : MonoBehaviour
         dataManager = FindObjectOfType<DataManager>();
 
         // bet
-        playerNb = dataManager.players.Count;
-        Debug.Log("players participate:" + playerNb);
+        playerIndex = dataManager.players.Count-1;
+        betCounter = dataManager.players.Count;
+        Debug.Log("players participate (+1):" + playerIndex);
+
+        txt_betTitle.text = dataManager.players[playerIndex].name + " it is your time to bet";
+
     }
 
     void Update()
@@ -39,6 +55,19 @@ public class InputController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             OpenMenu();
+        }
+
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            NextPlayer(playerIndex);
+        }
+
+        if (Input.GetKeyDown(KeyCode.P))
+        {
+            foreach (Player p in dataManager.players)
+            {
+                Debug.Log("Player : " + p.name + "\n" + "\n Sips C: " + p.sipsBet_C + "\n Sips D: " + p.sipsBet_D + "\n Sips H: " + p.sipsBet_H + "\n Sips S: " + p.sipsBet_S);
+            }
         }
     }
 
@@ -55,7 +84,7 @@ public class InputController : MonoBehaviour
                 {
                     DeckClicked();
                 }
-                else if (hit.collider.CompareTag("Horse"))
+                else if (hit.collider.CompareTag("BetHorse"))
                 {
                     BetOnHorse(hit.collider.gameObject);
                 }
@@ -66,48 +95,76 @@ public class InputController : MonoBehaviour
     private void DeckClicked()
     {
         gameController.PlayDeckCard();
-        // get back suite of card
-            // move horse 
     }
 
     
     // for later to get sips on horses
-    private void BetOnHorse(GameObject horse)
+    public void BetOnHorse(GameObject horse)
     {
-        betCount++;
+
         if(horse.name[0] == 'C')
         {
-            Debug.Log("Bet " + betCount + " sip on " + horse.name);
+            betCount_C++;
+            txt_betC.text = betCount_C + " sips";
         }
         if(horse.name[0] == 'D')
         {
-            Debug.Log("Bet " + betCount + " sip on " + horse.name);
+            betCount_D++;
+            txt_betD.text = betCount_D + " sips";
         }
         if(horse.name[0] == 'H')
         {
-            Debug.Log("Bet " + betCount + " sip on " + horse.name);
+            betCount_H++;
+            txt_betH.text = betCount_H + " sips";
         }
         if(horse.name[0] == 'S')
         {
-            Debug.Log("Bet " + betCount + " sip on " + horse.name);
+            betCount_S++;
+            txt_betS.text = betCount_S + " sips";
         }
+    }
 
-        NextPlayer(playerNb);
+    // help to assign Button in Editor
+    public void DoneBet()
+    {
+        NextPlayer(playerIndex);
     }
 
     void NextPlayer(int playerNumber)
     {
-        // reset sips bet 
-        betCount = 0;
-        //decrement global playerNb for next player
-        playerNb--;
+        
 
         // save data in player data 
-        dataManager.UpdatePlayerStats(playerNumber,Suits.DIAMAND, betCount);
-        // dataManager.players[playerNb].sips = betCount;
-        
-        // give next player chance to bet
+        dataManager.UpdatePlayerStats(playerNumber, betCount_C, betCount_D, betCount_H, betCount_S);
 
+        // reset sips bet 
+        betCount_C = 0;
+        betCount_D = 0;
+        betCount_H = 0;
+        betCount_S = 0;
+
+        txt_betC.text = betCount_C + " sips";
+        txt_betD.text = betCount_D + " sips";
+        txt_betH.text = betCount_H + " sips";
+        txt_betS.text = betCount_S + " sips";
+
+        //decrement global playerNb for next player
+        if (playerNumber > 0)
+        {
+            playerIndex--;
+        }
+
+        // change title
+        txt_betTitle.text = dataManager.players[playerIndex].name + " it is your time to bet";
+
+        betCounter--;
+
+        // if everyone has set bet close menu
+        if (betCounter == 0)
+        {
+            uiController.CloseBetMenu();
+            return;
+        }
     }
 
     private void OpenMenu()
