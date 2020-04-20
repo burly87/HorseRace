@@ -1,8 +1,6 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿
 using UnityEngine;
 using System.Linq;
-using System;
 
 public class GameController : MonoBehaviour
 {
@@ -22,19 +20,26 @@ public class GameController : MonoBehaviour
         }
 
         _instance = this;
-        DontDestroyOnLoad(this.gameObject);
     }
 
     // --- Classes to controll ---
     private GameLogic gameLogic;
     private InputController inputController;
     private UiController uiController;
+    private DataManager dataManager;
 
     // --- Play card from deck relevants ---
     float zOffset = 0f;                     // offset to set cards on top of each other, could also be done with layers in unity
     int cardsDrawn = 0;                     // hardcoded count for drawn cards to manage reshuffle deckpile
     int faceUpCount = 0;                    // hardcoded count for trackCards to face up
 
+    // --- Decide Winner ---
+    int winnerIndex = 0;
+
+    // --- Others ---
+    bool isAutoplay = false;
+    public float coolDown = 1.1f;
+    float currentCD;
 
     // -------- Methodes ---------
 
@@ -44,6 +49,7 @@ public class GameController : MonoBehaviour
         gameLogic = FindObjectOfType<GameLogic>();
         inputController = FindObjectOfType<InputController>();
         uiController = FindObjectOfType<UiController>();
+        dataManager = FindObjectOfType<DataManager>();
 
         //Start Game
         gameLogic.StartGame();
@@ -53,6 +59,28 @@ public class GameController : MonoBehaviour
         TrackCard.OnTriggerEnterTrackcard += TrackCard_OnTriggerEnterTrackcard;
     }
 
+    private void Update()
+    {
+        if (isAutoplay)
+        {
+            currentCD -= Time.deltaTime;
+            if (currentCD <= 0.0f)
+            {
+                PlayDeckCard();
+                currentCD = coolDown;
+            }
+        }
+    }
+
+    /// <summary>
+    /// reset Listener
+    /// </summary>
+    public void ObservReset()
+    {
+        FinishLine.OnEnterFinishLine -= FinishLine_OnEnterFinishLine;
+        TrackCard.OnTriggerEnterTrackcard -= TrackCard_OnTriggerEnterTrackcard;
+    }
+
     private void TrackCard_OnTriggerEnterTrackcard(TrackCard obj)
     {
         if(obj.Counter == 4)
@@ -60,23 +88,29 @@ public class GameController : MonoBehaviour
             obj.Counter = 0;
             TurnFaceofTrackCard();
         }
-    }
+    }    
 
     // --- Observe ---
     private void FinishLine_OnEnterFinishLine(FinishLine obj)
     {
         // Stop any clickable/ Thread
         inputController.ClickAble = false;
+        // Stop autoplay
+        isAutoplay = false;
+        //disable autoplayButton
+        uiController.DisableButtons();
 
         // set winner to winning horsename
         string winner = obj.HorseName;
-        ChooseWinner(winner[0]);
+        ChooseWinner(winner[0]);                            // No functionality yet
 
-        // tell UI to show up
+        // tell UI to show winner
         uiController.ShowWinningText(winner[0]);
     }
 
-    
+
+
+
     /// <summary>Get Char of wining horse and give it to UI</summary>
     /// <param name="winner"> char of wining horseCard </param>
     private void ChooseWinner(char winner)
@@ -84,20 +118,61 @@ public class GameController : MonoBehaviour
         switch(winner)
         {
             case 'C':
-                Debug.Log("CLUBS WINS!");
+                winnerIndex = 1;
                 break;
             case 'D':
-                Debug.Log("DIAMANDS WINS!");
+                winnerIndex = 2;
                 break;
             case 'H':
-                Debug.Log("HEART WINS!");
+                winnerIndex = 3;
                 break;
             case 'S':
-                Debug.Log("SPADES WINS!");
+                winnerIndex = 4;
                 break;
         }
+        CalculateWinner(winnerIndex);
     }
 
+    void CalculateWinner(int index)
+    {
+        for (int i = 0; i < dataManager.players.Count; i++)
+        {
+            Player tmpPlayer = dataManager.players[i];
+            if(index == 1)
+            {
+                if(tmpPlayer.sipsBet_C > 0)
+                {
+                    tmpPlayer.sipstoGive += tmpPlayer.sipsBet_C;
+                }
+            }
+            if (index == 2)
+            {
+                if (tmpPlayer.sipsBet_D > 0)
+                {
+                    tmpPlayer.sipstoGive += tmpPlayer.sipsBet_D;
+                }
+            }
+            if (index == 3)
+            {
+                if (tmpPlayer.sipsBet_H > 0)
+                {
+                    tmpPlayer.sipstoGive += tmpPlayer.sipsBet_H;
+                }
+            }
+            if (index == 4)
+            {
+                if (tmpPlayer.sipsBet_S > 0)
+                {
+                    tmpPlayer.sipstoGive += tmpPlayer.sipsBet_S;
+                }
+            }
+
+            tmpPlayer.sipstoGive *= 2;
+
+            //back to list
+            dataManager.players[i] = tmpPlayer;
+        }
+    }
 
 
     ///<summary>Make the deck clickable, draw card, put it on discardPile and remove from deck</summary>
@@ -161,14 +236,22 @@ public class GameController : MonoBehaviour
         }
     }
 
+    public void AutoPlay()
+    {
+        isAutoplay = !isAutoplay;
+        uiController.Autoplay(isAutoplay);
+    }
+
     ///<summar>Restart game</summary>
     public void RestartGame()
     {
         zOffset = 0.0f;
         cardsDrawn = 0;
         faceUpCount = 0;
-        inputController.ClickAble = true;
+        isAutoplay = false;
+
         uiController.RestartUi();
         gameLogic.RestartGame();
+        inputController.Restart();
     }
 }

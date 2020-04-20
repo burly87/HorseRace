@@ -1,10 +1,14 @@
 ScriptsOnlyBuild:
   usedScripts:
     Assembly-CSharp.dll:
+    - DataManager
     - FinishLine
     - GameController
     - GameLogic
     - InputController
+    - MainMenu
+    - PlayerController
+    - TrackCard
     - UiController
     - UpdateSprite
     Unity.2D.Tilemap.Editor.dll:
@@ -20,6 +24,7 @@ ScriptsOnlyBuild:
     - TMPro.TMP_Settings
     - TMPro.TMP_SpriteAsset
     - TMPro.TMP_StyleSheet
+    - TMPro.TextMeshProUGUI
     UnityEditor.TestRunner.dll:
     - UnityEditor.TestTools.TestRunner.Api.CallbacksHolder
     - UnityEditor.TestTools.TestRunner.TestListCacheData
@@ -31,9 +36,10 @@ ScriptsOnlyBuild:
     - UnityEngine.UI.CanvasScaler
     - UnityEngine.UI.GraphicRaycaster
     - UnityEngine.UI.Image
+    - UnityEngine.UI.InputField
     - UnityEngine.UI.Text
   sceneClasses:
-    Assets/Scenes/SampleScene.unity:
+    Assets/Scenes/MainTable.unity:
     - Class: 1
       Script: {instanceID: 0}
     - Class: 4
@@ -46,52 +52,54 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 48
       Script: {instanceID: 0}
-    - Class: 49
-      Script: {instanceID: 0}
     - Class: 50
       Script: {instanceID: 0}
     - Class: 61
+      Script: {instanceID: 0}
+    - Class: 74
       Script: {instanceID: 0}
     - Class: 81
       Script: {instanceID: 0}
     - Class: 89
       Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
+      Script: {instanceID: 0}
     - Class: 104
       Script: {instanceID: 0}
-    - Class: 109
-      Script: {instanceID: 0}
     - Class: 114
-      Script: {instanceID: 11746}
+      Script: {instanceID: 11738}
     - Class: 114
-      Script: {instanceID: 11992}
+      Script: {instanceID: 11758}
     - Class: 114
-      Script: {instanceID: 12044}
+      Script: {instanceID: 11986}
     - Class: 114
-      Script: {instanceID: 12116}
+      Script: {instanceID: 12038}
     - Class: 114
-      Script: {instanceID: 12634}
+      Script: {instanceID: 12110}
     - Class: 114
-      Script: {instanceID: 12672}
+      Script: {instanceID: 12628}
     - Class: 114
-      Script: {instanceID: 13276}
+      Script: {instanceID: 13270}
     - Class: 114
-      Script: {instanceID: 13422}
+      Script: {instanceID: 13416}
     - Class: 114
-      Script: {instanceID: 13580}
+      Script: {instanceID: 13576}
     - Class: 114
-      Script: {instanceID: 13600}
+      Script: {instanceID: 13866}
     - Class: 114
-      Script: {instanceID: 13876}
+      Script: {instanceID: 13872}
     - Class: 114
-      Script: {instanceID: 13958}
+      Script: {instanceID: 13956}
     - Class: 114
-      Script: {instanceID: 14042}
+      Script: {instanceID: 14040}
     - Class: 114
-      Script: {instanceID: 14176}
+      Script: {instanceID: 14174}
     - Class: 114
-      Script: {instanceID: 14202}
+      Script: {instanceID: 14428}
     - Class: 114
-      Script: {instanceID: 14430}
+      Script: {instanceID: 14472}
     - Class: 114
       Script: {instanceID: 14488}
     - Class: 115
@@ -116,6 +124,81 @@ ScriptsOnlyBuild:
       Script: {instanceID: 0}
     - Class: 850595691
       Script: {instanceID: 0}
+    Assets/Scenes/Menu.unity:
+    - Class: 1
+      Script: {instanceID: 0}
+    - Class: 4
+      Script: {instanceID: 0}
+    - Class: 20
+      Script: {instanceID: 0}
+    - Class: 21
+      Script: {instanceID: 0}
+    - Class: 28
+      Script: {instanceID: 0}
+    - Class: 48
+      Script: {instanceID: 0}
+    - Class: 49
+      Script: {instanceID: 0}
+    - Class: 74
+      Script: {instanceID: 0}
+    - Class: 81
+      Script: {instanceID: 0}
+    - Class: 91
+      Script: {instanceID: 0}
+    - Class: 95
+      Script: {instanceID: 0}
+    - Class: 104
+      Script: {instanceID: 0}
+    - Class: 109
+      Script: {instanceID: 0}
+    - Class: 114
+      Script: {instanceID: 11738}
+    - Class: 114
+      Script: {instanceID: 11758}
+    - Class: 114
+      Script: {instanceID: 11986}
+    - Class: 114
+      Script: {instanceID: 12038}
+    - Class: 114
+      Script: {instanceID: 12628}
+    - Class: 114
+      Script: {instanceID: 12666}
+    - Class: 114
+      Script: {instanceID: 13270}
+    - Class: 114
+      Script: {instanceID: 13532}
+    - Class: 114
+      Script: {instanceID: 13558}
+    - Class: 114
+      Script: {instanceID: 13576}
+    - Class: 114
+      Script: {instanceID: 13596}
+    - Class: 114
+      Script: {instanceID: 13866}
+    - Class: 114
+      Script: {instanceID: 13924}
+    - Class: 114
+      Script: {instanceID: 13956}
+    - Class: 114
+      Script: {instanceID: 14200}
+    - Class: 114
+      Script: {instanceID: 14488}
+    - Class: 115
+      Script: {instanceID: 0}
+    - Class: 128
+      Script: {instanceID: 0}
+    - Class: 157
+      Script: {instanceID: 0}
+    - Class: 196
+      Script: {instanceID: 0}
+    - Class: 213
+      Script: {instanceID: 0}
+    - Class: 222
+      Script: {instanceID: 0}
+    - Class: 223
+      Script: {instanceID: 0}
+    - Class: 224
+      Script: {instanceID: 0}
   scriptHashData:
   - hash:
       serializedVersion: 2
@@ -123,6 +206,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: CanvasScaler
+  - hash:
+      serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: MainMenu
   - hash:
       serializedVersion: 2
       Hash: 7e35d3832d8319cfa01edf0075b38da6
@@ -467,7 +556,7 @@ ScriptsOnlyBuild:
     className: NetworkStartPosition
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+      Hash: 4d867c09483df1037017d20283185976
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: GameController
@@ -483,6 +572,12 @@ ScriptsOnlyBuild:
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
     className: SignalReceiver
+  - hash:
+      serializedVersion: 2
+      Hash: 381f83a73dedf61a2e4506d38d6a81ec
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: PlayerController
   - hash:
       serializedVersion: 2
       Hash: 3164bc883ff663a5cdb32d1ef7e7c0c5
@@ -551,6 +646,12 @@ ScriptsOnlyBuild:
     className: DataPrivacyButton
   - hash:
       serializedVersion: 2
+      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: DataManager
+  - hash:
+      serializedVersion: 2
       Hash: f336e086360abe49a3323e5f1583c35a
     assemblyName: Unity.Timeline.dll
     namespaceName: UnityEngine.Timeline
@@ -599,7 +700,7 @@ ScriptsOnlyBuild:
     className: MarkerTrack
   - hash:
       serializedVersion: 2
-      Hash: bd45aac08f58d1287a7a3c6e1efda08f
+      Hash: 7737292bce1c99999f59f964ce31170b
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: UiController
@@ -671,7 +772,7 @@ ScriptsOnlyBuild:
     className: TMP_SubMesh
   - hash:
       serializedVersion: 2
-      Hash: 71bb6a6b6c8f052f948db64c7dd3ca4f
+      Hash: dbac6dfb816ba5e219c52c924b9db643
     assemblyName: Assembly-CSharp.dll
     namespaceName: 
     className: InputController
@@ -693,6 +794,12 @@ ScriptsOnlyBuild:
     assemblyName: UnityEngine.UI.dll
     namespaceName: UnityEngine.UI
     className: Dropdown
+  - hash:
+      serializedVersion: 2
+      Hash: 24594ce6c0c6304bdf1c621bb4d77450
+    assemblyName: Assembly-CSharp.dll
+    namespaceName: 
+    className: TrackCard
   - hash:
       serializedVersion: 2
       Hash: 748dd2a2a28da4e618912da5ac45684b
@@ -737,5 +844,6 @@ ScriptsOnlyBuild:
     className: PlayableTrack
   platform: 19
   scenePathNames:
-  - Assets/Scenes/SampleScene.unity
+  - Assets/Scenes/Menu.unity
+  - Assets/Scenes/MainTable.unity
   playerPath: D:/Workspace/Sligo/AdvancedProgramming/Build/HorseRace.exe

@@ -50,4 +50,13 @@ public class TrackCard : MonoBehaviour
         OnTriggerEnterTrackcard(this);
 
     }
+
+    public void RestartTrackCards()
+    { 
+        clubPassed = false;
+        diamandPassed = false;
+        heartPassed = false;
+        spadesPassed = false;
+        _counter = 0;
+    }
 }
