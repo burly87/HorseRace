@@ -208,10 +208,17 @@ public class GameLogic : MonoBehaviour
         horsePos[1].transform.position = new Vector3(-19.0f, 1.0f, 0.0f);
         horsePos[2].transform.position = new Vector3(-19.0f, -3.5f, 0.0f);
         horsePos[3].transform.position = new Vector3(-19.0f, -8.0f, 0.0f);
+
+        //reset trackCard booleans
+        foreach (GameObject card in cardsOfRacetrackPos)
+        {
+            TrackCard tmp = card.GetComponent<TrackCard>();
+            tmp.RestartTrackCards();
+        }
+
         //start game
         StartGame();
     }
-
 }
 
 
