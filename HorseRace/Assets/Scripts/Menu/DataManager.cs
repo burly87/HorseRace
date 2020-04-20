@@ -56,6 +56,9 @@ public class DataManager : MonoBehaviour
         players.Add(player);
     }
 
+    /// <summary>
+    /// Update Stats to given sips form InputController
+    /// </summary>
     public void UpdatePlayerStats(int index, int sipsUp_C, int sipsUp_D, int sipsUp_H, int sipsUp_S)
     {
         Player p = players[index];
@@ -65,7 +68,31 @@ public class DataManager : MonoBehaviour
         p.sipsBet_S = sipsUp_S;
 
         players[index] = p;
-       // Debug.Log("Playernindex: " + index + "Suit: "+ players[index].suit + "Sips: " + players[index].sips);
+    }
+
+    /// <summary>
+    /// Reset sips to 0 for all Players in List
+    /// </summary>
+    public void ResetSipsofPlayers()
+    {
+        for (int i = 0; i < players.Count; i++)
+        {
+            Player p = players[i];
+            p.sipsBet_C = 0;
+            p.sipsBet_D = 0;
+            p.sipsBet_H = 0;
+            p.sipsBet_S = 0;
+            p.sipstoGive = 0;
+            players[i] = p;
+        }
+    }
+
+    /// <summary>
+    /// Clear the list of players
+    /// </summary>
+    public void ClearData()
+    {
+        players.Clear();
     }
 
 }
